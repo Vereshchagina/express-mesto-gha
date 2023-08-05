@@ -38,8 +38,48 @@ const createUser = (req, res) => {
     });
 };
 
+const updateUser = (req, res) => {
+  const userId = req.user._id;
+  const { name, about } = req.body;
+  User.findByIdAndUpdate(userId, { name, about }, { new: true, runValidators: true })
+    .then((user) => {
+      if (!user) {
+        res.status(404).send({ message: 'Пользователь не найден' });
+      }
+      res.status(200).send({ data: user });
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'Передан некорректный запрос' });
+      } else {
+        res.status(500).send({ message: 'Произошла ошибка на сервере' });
+      }
+    });
+};
+
+const updateAvatar = (req, res) => {
+  const userId = req.user._id;
+  const { avatar } = req.body;
+  User.findByIdAndUpdate(userId, { avatar }, { new: true, runValidators: true })
+    .then((user) => {
+      if (!user) {
+        res.status(404).send({ message: 'Пользователь не найден' });
+      }
+      res.status(200).send({ data: user });
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: 'Передан некорректный запрос' });
+      } else {
+        res.status(500).send({ message: 'Произошла ошибка на сервере' });
+      }
+    });
+};
+
 module.exports = {
   getUsers,
   getUserById,
   createUser,
+  updateUser,
+  updateAvatar,
 };
