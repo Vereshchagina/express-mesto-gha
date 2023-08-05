@@ -13,7 +13,6 @@ const getCards = (req, res) => {
 const createCard = (req, res) => {
   const { name, link } = req.body;
   const userId = req.user._id;
-  console.log(userId);
   Card.create({ name, link, owner: userId })
     .then((card) => {
       res.status(201).send({ data: card });
@@ -32,6 +31,7 @@ const deleteCard = (req, res) => {
     .then((card) => {
       if (!card) {
         res.status(404).send({ message: 'Карточка не найдена' });
+        return;
       }
       res.status(200).send({ data: card });
     })
@@ -49,11 +49,16 @@ const likeCard = (req, res) => {
     .then((card) => {
       if (!card) {
         res.status(404).send({ message: 'Карточка не найдена' });
+        return;
       }
       res.status(200).send({ data: card });
     })
-    .catch(() => {
-      res.status(500).send({ message: 'Произошла ошибка на сервере' });
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Переданы некорректные данные для постановки лайка' });
+      } else {
+        res.status(500).send({ message: 'Произошла ошибка на сервере' });
+      }
     });
 };
 
@@ -66,11 +71,16 @@ const dislikeCard = (req, res) => {
     .then((card) => {
       if (!card) {
         res.status(404).send({ message: 'Карточка не найдена' });
+        return;
       }
       res.status(200).send({ data: card });
     })
-    .catch(() => {
-      res.status(500).send({ message: 'Произошла ошибка на сервере' });
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Переданы некорректные данные для снятия лайка' });
+      } else {
+        res.status(500).send({ message: 'Произошла ошибка на сервере' });
+      }
     });
 };
 
