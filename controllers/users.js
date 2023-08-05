@@ -19,8 +19,12 @@ const getUserById = (req, res) => {
       }
       res.status(200).send({ data: user });
     })
-    .catch(() => {
-      res.status(500).send({ message: 'Произошла ошибка на сервере' });
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Переданы некорректные данные' });
+      } else {
+        res.status(500).send({ message: 'Произошла ошибка на сервере' });
+      }
     });
 };
 
