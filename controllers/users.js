@@ -6,7 +6,7 @@ const getUsers = (req, res) => {
       res.status(200).send({ data: users });
     })
     .catch(() => {
-      res.status(500).send({ message: 'Произошла ошибка на сервере' });
+      res.status(500).send({ message: 'На сервере произошла ошибка' });
     });
 };
 
@@ -23,7 +23,7 @@ const getUserById = (req, res) => {
       if (err.name === 'CastError') {
         res.status(400).send({ message: 'Переданы некорректные данные' });
       } else {
-        res.status(500).send({ message: 'Произошла ошибка на сервере' });
+        res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
@@ -38,7 +38,7 @@ const createUser = (req, res) => {
       if (err.name === 'ValidationError') {
         res.status(400).send({ message: 'Передан некорректный запрос' });
       } else {
-        res.status(500).send({ message: 'Произошла ошибка на сервере' });
+        res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
@@ -58,7 +58,7 @@ const updateUser = (req, res) => {
       if (err.name === 'ValidationError') {
         res.status(400).send({ message: 'Передан некорректный запрос' });
       } else {
-        res.status(500).send({ message: 'Произошла ошибка на сервере' });
+        res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
@@ -78,7 +78,7 @@ const updateAvatar = (req, res) => {
       if (err.name === 'ValidationError') {
         res.status(400).send({ message: 'Передан некорректный запрос' });
       } else {
-        res.status(500).send({ message: 'Произошла ошибка на сервере' });
+        res.status(500).send({ message: 'На сервере произошла ошибка' });
       }
     });
 };
