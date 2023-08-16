@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 
@@ -13,6 +14,7 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 const app = express();
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 app.use((req, res, next) => {
   req.user = {

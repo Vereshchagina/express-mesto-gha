@@ -1,3 +1,5 @@
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 const getUsers = (req, res) => {
@@ -29,18 +31,30 @@ const getUserById = (req, res) => {
 };
 
 const createUser = (req, res) => {
-  const { name, about, avatar } = req.body;
-  User.create({ name, about, avatar })
-    .then((user) => {
-      res.status(201).send({ data: user });
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
+
+  bcrypt
+    .hash(password, 10)
+    .then((hash) => User.create({
+      name,
+      about,
+      avatar,
+      email,
+      password: hash,
     })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Передан некорректный запрос' });
-      } else {
-        res.status(500).send({ message: 'На сервере произошла ошибка' });
-      }
-    });
+      .then((user) => { res.status(201).send({ data: user }); })
+      .catch((err) => {
+        if (err.name === 'ValidationError') {
+          res.status(400).send({ message: 'Передан некорректный запрос' });
+        }
+        if (err.code === 11000) {
+          res.status(409).send({ message: 'Такой пользователь уже существует' });
+        } else {
+          res.status(500).send({ message: 'На сервере произошла ошибка' });
+        }
+      }));
 };
 
 const updateUser = (req, res) => {
@@ -83,10 +97,28 @@ const updateAvatar = (req, res) => {
     });
 };
 
+const login = (req, res) => {
+  const { email, password } = req.body;
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
+      res.cookie('jwt', token, {
+        maxAge: 3600000 * 24 * 7,
+        httpOnly: true,
+      })
+        .send({ token });
+    })
+    .catch(() => {
+      res.status(401).send({ message: 'Неправильные почта или пароль' });
+    });
+};
+
 module.exports = {
   getUsers,
   getUserById,
   createUser,
   updateUser,
   updateAvatar,
+  login,
 };
