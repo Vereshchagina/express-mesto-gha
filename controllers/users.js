@@ -12,6 +12,14 @@ const getUsers = (req, res) => {
     });
 };
 
+const getMyProfile = (req, res) => {
+  User.findById(req.user._id)
+    .then((user) => res.status(200).send({ data: user }))
+    .catch(() => {
+      res.status(500).send({ message: 'На сервере произошла ошибка' });
+    });
+};
+
 const getUserById = (req, res) => {
   User.findById(req.params.userId)
     .then((user) => {
@@ -121,4 +129,5 @@ module.exports = {
   updateUser,
   updateAvatar,
   login,
+  getMyProfile,
 };
