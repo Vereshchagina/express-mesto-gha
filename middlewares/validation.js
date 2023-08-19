@@ -17,8 +17,10 @@ const validateGetUserById = celebrate({
 
 const validatePostUser = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30).default('Жак-Ив Кусто'),
-    about: Joi.string().min(2).max(30).default('Исследователь'),
+    name: Joi.string().min(2).max(30).required()
+      .default('Жак-Ив Кусто'),
+    about: Joi.string().min(2).max(30).required()
+      .default('Исследователь'),
     avatar: Joi.string().pattern(regularUrl).default('https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png'),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
@@ -27,14 +29,14 @@ const validatePostUser = celebrate({
 
 const validatePatchUserInfo = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
+    name: Joi.string().min(2).max(30).required(),
+    about: Joi.string().min(2).max(30).required(),
   }),
 });
 
 const validatePatchAvatar = celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().pattern(regularUrl),
+    avatar: Joi.string().required().pattern(regularUrl),
   }),
 });
 
