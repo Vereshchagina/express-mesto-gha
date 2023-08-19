@@ -3,17 +3,18 @@ const userRouter = require('./users');
 const cardRouter = require('./cards');
 const { login, createUser } = require('../controllers/users');
 const auth = require('../middlewares/auth');
-const UnauthorizedError = require('../errors/UnauthorizedError');
+const NotFoundError = require('../errors/NotFoundError');
+const { validatePostUser, validateLogin } = require('../middlewares/validation');
 
-router.post('/signin', login);
-router.post('/signup', createUser);
+router.post('/signin', validateLogin, login);
+router.post('/signup', validatePostUser, createUser);
 
 router.use(auth);
 
 router.use('/users', userRouter);
 router.use('/cards', cardRouter);
 router.use('*', (req, res, next) => {
-  next(new UnauthorizedError('Необходима авторизация'));
+  next(new NotFoundError('Запрашиваемая страница не найдена'));
 });
 
 module.exports = router;
