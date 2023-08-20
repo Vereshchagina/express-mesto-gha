@@ -120,10 +120,7 @@ const login = (req, res, next) => {
           maxAge: 3600000 * 24 * 7,
           httpOnly: true,
         })
-        .send({
-          name: user.name,
-          email: user.email,
-        });
+        .send({ token });
     })
     .catch(() => {
       next(new UnauthorizedError('Неправильные почта или пароль'));
