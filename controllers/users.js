@@ -16,9 +16,8 @@ const getUsers = (req, res, next) => {
 
 const getMyProfile = (req, res, next) => {
   User.findById(req.user._id)
-    .then((user) => {
-      res.status(200).send({ data: user });
-    })
+    .orFail(new NotFoundError('Пользователь не найден'))
+    .then((user) => res.status(200).send({ data: user }))
     .catch(next);
 };
 
