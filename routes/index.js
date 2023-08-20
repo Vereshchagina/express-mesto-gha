@@ -10,8 +10,10 @@ router.post('/signin', validateLogin, login);
 router.post('/signup', validatePostUser, createUser);
 
 router.use(auth);
+
 router.use('/users', userRouter);
 router.use('/cards', cardRouter);
+
 router.use('*', (req, res, next) => {
   next(new NotFoundError('Запрашиваемая страница не найдена'));
 });
