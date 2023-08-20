@@ -9,10 +9,10 @@ const {
   getMyProfile,
 } = require('../controllers/users');
 
-router.get('/users', getUsers);
-router.get('/users/:userId', validateGetUserById, getUserById);
-router.get('/users/me', getMyProfile);
-router.patch('/users/me', validatePatchUserInfo, updateUser);
-router.patch('/users/me/avatar', validatePatchAvatar, updateAvatar);
+router.get('/', getUsers);
+router.get('/:userId', validateGetUserById, getUserById);
+router.get('/me', getMyProfile);
+router.patch('/me', validatePatchUserInfo, updateUser);
+router.patch('/me/avatar', validatePatchAvatar, updateAvatar);
 
 module.exports = router;
